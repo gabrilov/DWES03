@@ -1,0 +1,28 @@
+services:
+  mariadb_dwes:
+    image: mariadb:11.4.3
+    container_name: dwes_mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tarea3
+      - MYSQL_USER=gestor
+      - MYSQL_PASSWORD=secreto
+    volumes:
+      - ./tarea.sql:/docker-entrypoint-initdb.d/tarea.sql
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  php_dwes:
+    build: .
+    container_name: dwes_php
+    ports:
+      - "9000:80"
+    volumes:
+      - ./www:/var/www/html
+    links:
+      - mariadb_dwes
+    command: > 
+      bash -c " 
+      chown -R 1000:1000 /var/www/html && 
+      apache2-foreground"
+
