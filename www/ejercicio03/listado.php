@@ -16,7 +16,8 @@ $log = obtenerLog();
       color-scheme: light dark;
     }
 
-    h1 {
+    h1,
+    h4 {
       text-align: center;
     }
 
@@ -57,6 +58,7 @@ $log = obtenerLog();
       <?php endforeach ?>
     </table>
   <?php endif ?>
+  <h4><a href="/ejercicio01/tienda.php">Volver al inicio</a></h4>
 </body>
 
 </html>

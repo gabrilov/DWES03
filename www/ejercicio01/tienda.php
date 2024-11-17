@@ -1,4 +1,5 @@
 <?php
+// Cargo el archivo de conexión
 require_once '../conexion.php';
 
 $productos = null;

@@ -1,4 +1,5 @@
 <?php
+// Cargamos el archivo de conexión
 require_once '../conexion.php';
 $producto = null;
 $consultaProducto = "SELECT * FROM productos WHERE id=:id";
@@ -40,18 +41,19 @@ if (
       );
       registrarActualizacion($_POST['id'], date('Y-m-d H:i:s'));
       $conexion->commit();
-      // Se intenta mostrar un mensaje
-      if ($estaActualizado) $mensajeResultado = "CORRECTO Se han actualizado los datos de " . $_POST['nombre-corto'];
+      // Se muestra un mensaje conforme al resultado y se redirige a la ventana principal
+      $mensajeResultado = $estaActualizado
+        ? "CORRECTO Se han actualizado los datos de " . $_POST['nombre-corto']
+        : "ERROR: No se a realizado ninguna actualización";
       $producto = obtenerProducto($_POST['id']);
-      // Se redirije a otra página. Esto hace que el mensaje no se muestra, pero con PHP, al parecer
-      // es imposible mostrar mensaje y redirigir, habría que emplear javascript en el lado del cliente
-      header("Location: /ejercicio03/listado.php");
+      // Si se actualiza, se redirige
+      header("refresh:2; url=/ejercicio01/tienda.php");
       break;
-      //Si se cancela, se intenta mostrar mensaje y se redirige al inicio
+      //Si se cancela, se muestra un mensaje y se redirige a la página principal
     case 'cancelar':
       $mensajeResultado = "CANCELANDO...";
       $producto = obtenerProducto($_POST['id']);
-      header("Location: /ejercicio01/tienda.php");
+      header("refresh:2; url=/ejercicio01/tienda.php");
       break;
   }
 }
@@ -59,7 +61,7 @@ if (
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
@@ -102,6 +104,10 @@ if (
       font-size: 1.2rem;
       padding: 10px;
     }
+
+    #mensaje {
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -131,7 +137,7 @@ if (
       <button type="submit" name="boton" value="cancelar">Cancelar</button>
     </div>
   </form>
-  <h4><?= $mensajeResultado; ?></h4>
+  <h4 id="mensaje"><?= $mensajeResultado; ?></h4>
 </body>
 
 </html>
